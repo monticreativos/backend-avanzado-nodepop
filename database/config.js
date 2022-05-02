@@ -11,10 +11,8 @@ require('dotenv').config();
 const dbConnection = () => {
 
     try {
-         mongoose.connect( process.env.MONGODB_CNN,{
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        console.log(process.env.MONGODB_CNN)
+         mongoose.connect( process.env.MONGODB_CNN );
     
         console.log('Base de datos online');
 

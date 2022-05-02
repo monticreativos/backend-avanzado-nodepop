@@ -6,6 +6,9 @@
 const express = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const i18n = require('../lib/i18nConfigure');
+
+
 
 
 const { dbConnection } = require('../database/config');
@@ -17,7 +20,9 @@ class Server {
         this.port = process.env.PORT;
         this.paths = {
             anuncios: '/api/anuncios',
-            uploads: '/api/uploads'
+            uploads: '/api/uploads',
+            authenticate: '/api/authenticate',
+            usuarios: '/api/user',
         };
 
         //Conectar a base de datos para
@@ -52,11 +57,17 @@ class Server {
         // Directorio Público
         this.app.use( express.static('public') );
 
+        this.app.use( i18n.init );
+
     }
 
     routes() {
         this.app.use( this.paths.anuncios, require('../routes/anuncios'));
         this.app.use( this.paths.uploads, require('../routes/uploads'));
+        this.app.use( this.paths.authenticate, require('../routes/auth'));
+        this.app.use( this.paths.usuarios, require('../routes/usuarios'));
+
+
 
     }
 

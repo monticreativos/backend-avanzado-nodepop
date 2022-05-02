@@ -18,12 +18,16 @@ const { anunciosGet,
 const { cargarArchivo } = require('../controllers/uploads');
 
 const { validarCampos } = require('../middlewares/validar-campos');
+const { validarJWT } = require('../middlewares/validar-jwt');
+
 const { existeAnuncioPorId } = require('../helpers/db-validators');
     
 const router = Router();
 
 
-router.get('/', anunciosGet);
+router.get('/',[
+    validarJWT
+], anunciosGet);
 
 router.get('/:id',[
     check('id', 'No es un id de Mongo válido').isMongoId(),
@@ -38,7 +42,7 @@ router.put('/:id',[
 ], anunciosPut );
 
 router.post('/', [
-    check('nombre', 'El anuncio no es válido').not().isEmpty().trim().escape(),
+    check('nombre', 'El nombre del anuncio no es válido').not().isEmpty().trim().escape(),
     check('venta', 'La opción de venta no es válida').toBoolean(),
     check('precio', 'El precio no es válido').isNumeric(),
     validarCampos

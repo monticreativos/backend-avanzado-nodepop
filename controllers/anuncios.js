@@ -5,6 +5,9 @@
 
 const { response, request } = require('express');
 const  Anuncio = require('../models/anuncio');
+const { subirArchivo } = require("../helpers/subir-archivo");
+
+
 
 const anunciosGet = async(req = request, res = response) => {
 
@@ -63,22 +66,26 @@ const anunciosGet = async(req = request, res = response) => {
 const anunciosPost = async (req, res = response) => {
 
     // Desestructuramos los parametros que vienen en la Request
-    const { nombre, venta, precio, foto, tags } = req.body;   
-
+    const { nombre, venta, precio, tags } = req.body;  
+    
+    const {nombreTemp:img, response:thumbnail} = await subirArchivo( req.files, undefined, 'imgs' );
+    console.log(img)
+    
     // Creamos el modelo anuncio para añadir al DB
     const anuncio = new Anuncio( {
         nombre,
         venta,
         precio,
-        foto,
+        img,
         tags
     } );
 
     // Guardamos el nuevo anuncio
     await anuncio.save();
-
+console.log('ruta thumbnail',thumbnail)
     res.json({
-        anuncio
+        anuncio,
+        thumbnail
     });
 }
 

@@ -7,6 +7,8 @@ import mongoose from 'mongoose';
 
 import {dbConnection} from './database/config.js';
 import Anuncio from './models/anuncio.js';
+import Usuario from './models/usuario.js';
+import bcryptjs from 'bcryptjs';
 
 // Conectamos a la Base de Datos
 dbConnection();
@@ -30,13 +32,30 @@ async function main() {
     // borrar todos los documentos de agentes que haya en la colección
     const deleted = await Anuncio.deleteMany();
     console.log(`Eliminados ${deleted.deletedCount} anuncios.`);
+
+    const deletedUser = await Usuario.deleteMany();
+    console.log(`Eliminados ${deletedUser.deletedCount} usuarios.`);
   
     const data = await fsPromise.readFile('initDB.anuncios.json', 'utf-8');
+    const dataUser = await fsPromise.readFile('initDB.usuarios.json', 'utf-8');
+
     const anuncioData = JSON.parse(data);
-  
+    const userData = JSON.parse(dataUser);
+
+    for (let i = 0; i < userData.length; i++) {
+      const salt = bcryptjs.genSaltSync();
+      userData[i].password = bcryptjs.hashSync(userData[i].password, salt);      
+    }
+    
     // crear agentes iniciales
     const anuncio = await Anuncio.insertMany(anuncioData);
     console.log(`Creados ${anuncio.length} Anuncios.`);
+
+    const usuario = await Usuario.insertMany(userData);
+    console.log(`Creados ${usuario.length} Usuarios.`);
+    
+
+
   }
 
   function pregunta(texto) {
