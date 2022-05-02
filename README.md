@@ -6,6 +6,7 @@ Configurar la variables de entorno en el archivo .example.env
 ```shell
 PORT=8080
 MONGODB_CNN=
+SECRETORPRIVATEKEY=
 ```
 
 Luego, copiar el .example.env archivar en un nuevo .env archivo y complete los valores.
@@ -34,6 +35,7 @@ npm run start
 
 * http://localhost:8080/
 
+Para mostrar los anuncios debes enviarle un token valido desde el header de la peticion, KEY = 'x-token'.
 Home, muestra todos los anuncios, a esta URL podremos aplicar filtros y paginación para conseguir distintas listas.
 
 ### Con los filtros: 
@@ -71,14 +73,13 @@ Busca entre todos los anuncios y devuelve una lista de todos los tags utilizados
 
 ## Subida de Imagenes
 
-* http://localhost:8080/api/uploads:id
+* http://localhost:8080/api/anuncios
 
-Para la subida de una imagen del anuncio. La imagen se enviara por form-data con el parametro 'archivo'
+Para la subida de una imagen del anuncio. La imagen se enviara por form-data con el parametro 'archivo';
 
-Obtenemos la imagen de una anuncio por metodo GET
-* http://localhost:8080/api/uploads/anuncios/:id
+## Login user
 
-Busca entre todos los anuncios y devuelve la imagen segun el ID del anuncio
+* http://localhost:8080/api/authenticate
 
 
 
